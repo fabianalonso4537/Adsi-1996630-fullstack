@@ -3,17 +3,20 @@ import { check } from "express-validator";
 import { categoriapost, categoriaGet, categoriaGetById, categoriaPut, categoriaPutActivar, categoriaPutDesactivar, categoriaDelete } from "../controllers/categoria.js";
 import { existeCategoriaById, existeCategoriaByNombre } from "../helpers/bd-categoria.js";
 import validarCampos from "../middleware/validar-campos.js";
+import { validarRol } from "../middleware/validar-rol.js";
 import { validarTokenJWT } from "../middleware/validar-token.js";
 
 const router = new Router();
 
 router.get('/', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     validarCampos
 ], categoriaGet);
 
 router.get('/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeCategoriaById),
     validarCampos
@@ -21,6 +24,7 @@ router.get('/:id', [
 
 router.post('/', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('nombre', 'EL nombre es obligatorio').not().isEmpty(),
     check('nombre').custom(existeCategoriaByNombre),
     validarCampos
@@ -28,6 +32,7 @@ router.post('/', [
 
 router.put('/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeCategoriaById),
     check('nombre').custom(existeCategoriaByNombre),
@@ -36,6 +41,7 @@ router.put('/:id', [
 
 router.put('/activar/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeCategoriaById),
     validarCampos
@@ -44,6 +50,7 @@ router.put('/activar/:id', [
 
 router.put('/desactivar/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeCategoriaById),
     validarCampos
@@ -51,6 +58,7 @@ router.put('/desactivar/:id', [
 
 router.delete('/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeCategoriaById),
     validarCampos

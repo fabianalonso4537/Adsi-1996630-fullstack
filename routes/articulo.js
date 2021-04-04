@@ -3,6 +3,7 @@ import { check } from "express-validator";
 import { articuloDelete, articuloGet, articuloGetById, articulopost, articuloPut, articuloPutActivar, articuloPutDesactivar } from "../controllers/articulo.js";
 import { existeArticuloById, existeArticuloByCodigo, existeArticuloByNombre } from "../helpers/bd-articulo.js";
 import validarCampos from "../middleware/validar-campos.js";
+import { validarRol } from "../middleware/validar-rol.js";
 import { validarTokenJWT } from "../middleware/validar-token.js";
 
 
@@ -10,11 +11,13 @@ const router = new Router();
 
 router.get('/', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     validarCampos
 ], articuloGet);
 
 router.get('/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeArticuloById),
     validarCampos
@@ -22,6 +25,7 @@ router.get('/:id', [
 
 router.post('/', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('codigo', 'EL codigo es obligatorio').not().isEmpty(),
     check('codigo').custom(existeArticuloByCodigo),
     check('nombre', 'EL nombre es obligatorio').not().isEmpty(),
@@ -31,6 +35,7 @@ router.post('/', [
 
 router.put('/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeArticuloById),
     check('codigo').custom(existeArticuloByCodigo),
@@ -40,6 +45,7 @@ router.put('/:id', [
 
 router.put('/activar/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeArticuloById),
     validarCampos
@@ -48,6 +54,7 @@ router.put('/activar/:id', [
 
 router.put('/desactivar/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeArticuloById),
     validarCampos
@@ -55,6 +62,7 @@ router.put('/desactivar/:id', [
 
 router.delete('/:id', [
     validarTokenJWT,
+    validarRol('ALMACENISTA_ROL'),
     check('id', 'no es un  ID valido').isMongoId(),
     check('id').custom(existeArticuloById),
     validarCampos

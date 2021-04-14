@@ -2,14 +2,10 @@ import Compra from "../models/compra.js"
 
 
 const compraGet = async(req, res) => {
-    const { value } = req.query
-    const compra = await Compra.find({
-        $or: [
-            { TpCombrobante: new RegExp(value, 'i') },
-            { SrCombrobante: new RegExp(value, 'i') },
-            { NumCombrobante: new RegExp(value, 'i') }
-        ]
-    }).sort({ "createdAt": -1 })
+    const compra = await Compra
+        .find()
+        .populate('usuario', 'nombre')
+        .populate('persona', 'nombre')
     res.json({
         compra
     })
@@ -25,9 +21,9 @@ const compraGetById = async(req, res) => {
 }
 
 const comprapost = async(req, res) => {
-    const { TpCombrobante, SrCombrobante, NumCombrobante } = req.body;
+    const { TpCombrobante, usuario, persona, SrCombrobante, NumCombrobante, impuesto, total, cantidad, articulo, precio, descuento } = req.body;
 
-    const compra = new Compra({ TpCombrobante, SrCombrobante, NumCombrobante })
+    const compra = new Compra({ TpCombrobante, usuario, persona, SrCombrobante, NumCombrobante, impuesto, total, cantidad, articulo, precio, descuento })
 
     await compra.save();
 

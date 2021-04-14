@@ -1,13 +1,9 @@
 import Articulo from "../models/articulo.js"
 
 const articuloGet = async(req, res) => {
-    const { value } = req.query
-    const articulo = await Articulo.find({
-        $or: [
-            { codigo: new RegExp(value, 'i') },
-            { nombre: new RegExp(value, 'i') }
-        ]
-    }).sort({ "createdAt": -1 })
+    const articulo = await Articulo
+        .find()
+        .populate('categoria', 'nombre')
     res.json({
         articulo
     })
@@ -24,9 +20,9 @@ const articuloGetById = async(req, res) => {
 
 
 const articulopost = async(req, res) => {
-    const { codigo, nombre } = req.body;
+    const { codigo, categoria, nombre, descripcion, precioventa, stok } = req.body;
 
-    const articulo = new Articulo({ codigo, nombre })
+    const articulo = new Articulo({ codigo, categoria, nombre, descripcion, precioventa, stok })
 
     await articulo.save();
 

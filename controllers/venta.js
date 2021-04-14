@@ -1,14 +1,10 @@
 import Venta from "../models/venta.js"
 
 const ventaGet = async(req, res) => {
-    const { value } = req.query
-    const venta = await Venta.find({
-        $or: [
-            { TpCombrobante: new RegExp(value, 'i') },
-            { SrCombrobante: new RegExp(value, 'i') },
-            { NumCombrobante: new RegExp(value, 'i') }
-        ]
-    }).sort({ "createdAt": -1 })
+    const venta = await Venta
+        .find()
+        .populate('usuario', 'nombre')
+        .populate('persona', 'nombre')
     res.json({
         venta
     })
@@ -24,9 +20,9 @@ const ventaGetById = async(req, res) => {
 }
 
 const ventapost = async(req, res) => {
-    const { TpCombrobante, SrCombrobante, NumCombrobante } = req.body;
+    const { TpCombrobante, usuario, persona, SrCombrobante, NumCombrobante, impuesto, total, cantidad, precio, descuento } = req.body;
 
-    const venta = new Venta({ TpCombrobante, SrCombrobante, NumCombrobante })
+    const venta = new Venta({ TpCombrobante, usuario, persona, SrCombrobante, NumCombrobante, impuesto, total, cantidad, precio, descuento })
 
     await venta.save();
 

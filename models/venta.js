@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 const ventaSchema = mongoose.Schema({
+    usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'usuario', required: true },
+    persona: { type: mongoose.Schema.Types.ObjectId, ref: 'persona', required: true },
     TpCombrobante: { type: String, require: true, maxlength: 50, unique: true },
     SrCombrobante: { type: String, require: true, maxlength: 50, unique: true },
     NumCombrobante: { type: String, require: true, maxlength: 50, unique: true },
